@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: gray;
+      }
+
+      .kalkulator {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        border: 5px solid black;
+      }
+
+      .screen {
+        width: 100%;
+        height: 50px;
+        text-align: right;
+        font-size: 2em;
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      button {
+        flex: 1;
+        font-size: 1.5em;
+        padding: 20px;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: white;
+      }
+
+      button:active {
+        background-color: black;
+        color: white;
+      }
+
+      p.d1 {
+        position: absolute;
+        bottom: 10px;
+        font-size: 0.8em;
+        color: lightgray;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="kalkulator">
+      <input id="screen" class="screen" disabled />
+      <div class="button-row">
+        <button onClick="klik(this)">7</button>
+        <button onClick="klik(this)">8</button>
+        <button onClick="klik(this)">9</button>
+        <button onClick="klik(this)">C</button>
+      </div>
+      <div class="button-row">
+        <button onClick="klik(this)">4</button>
+        <button onClick="klik(this)">5</button>
+        <button onClick="klik(this)">6</button>
+        <button onClick="klik(this)">+</button>
+      </div>
+      <div class="button-row">
+        <button onClick="klik(this)">1</button>
+        <button onClick="klik(this)">2</button>
+        <button onClick="klik(this)">3</button>
+        <button onClick="klik(this)">-</button>
+      </div>
+      <div class="button-row">
+        <button onClick="klik(this)">0</button>
+        <button onClick="klik(this)">.</button>
+        <button onClick="klik(this)">/</button>
+        <button onClick="klik(this)">*</button>
+      </div>
+      <div class="button-row">
+        <button onClick="klik(this)">=</button>
+      </div>
+    </div>
+    <p class="d1">Kajetan</p>
+    <script>
+      const screen = document.getElementById("screen");
+
+      let first = "";
+      let second = "";
+      let sign = null;
+      let result = 0;
+      let justCalculated = false;
+	  
+      screen.value = 0;
+      function klik(button) {
+        const value = button.innerText;
+        if (value === "C") {
+          first = "";
+          second = "";
+          sign = null;
+          result = 0;
+          justCalculated = false;
+          screen.value = 0;
+          return;
+        }
+        if (value === "=") {
+          if (first && sign && second) {
+            const num1 = parseFloat(first);
+            const num2 = parseFloat(second);
+            if (sign === "+") {
+              result = num1 + num2;
+            } else if (sign === "-") {
+              result = num1 - num2;
+            } else if (sign === "*") {
+              result = num1 * num2;
+            } else if (sign === "/") {
+              result = num2 !== 0 ? num1 / num2 : "Błąd";
+            }
+            screen.value = result;
+            first = result.toString();
+            second = "";
+            sign = null;
+            justCalculated = true;
+          }
+          return;
+        }
+        if (justCalculated && !isNaN(value)) {
+          first = "";
+          second = "";
+          sign = null;
+          result = 0;
+          justCalculated = false;
+        }
+        if (!sign) {
+          if (
+            value === "+" ||
+            value === "-" ||
+            value === "*" ||
+            value === "/"
+          ) {
+            if (first !== "") {
+              sign = value;
+            }
+          } else {
+            first += value;
+          }
+        } else {
+          second += value;
+        }
+        screen.value = first + (sign || "") + second;
+      }
+    </script>
+  </body>
+</html>
